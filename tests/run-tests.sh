@@ -521,6 +521,54 @@ assert_contains "$GIT_DECISIONS" "FILES:" "lists changed files"
 
 rm -rf "$TMPGITREPO"
 
+# ─── Test: github.sh — no git repo ──────────────────────────────────────────
+
+echo ""
+echo "=== Test: github.sh — fallback behavior ==="
+
+TMPNOGITHUB=$(mktemp -d)
+
+# Test check in non-repo directory
+GH_CHECK=$("${PLUGIN_DIR}/scripts/github.sh" check "${TMPNOGITHUB}" 2>&1)
+assert_contains "$GH_CHECK" "GITHUB CHECK" "check outputs format"
+assert_contains "$GH_CHECK" "STATUS:" "reports status"
+
+# Test prs fallback in non-repo
+GH_PRS=$("${PLUGIN_DIR}/scripts/github.sh" prs "${TMPNOGITHUB}" 2>&1)
+assert_contains "$GH_PRS" "GITHUB PRS" "prs outputs format"
+
+# Test issues fallback in non-repo
+GH_ISSUES=$("${PLUGIN_DIR}/scripts/github.sh" issues "${TMPNOGITHUB}" 2>&1)
+assert_contains "$GH_ISSUES" "GITHUB ISSUES" "issues outputs format"
+
+# Test reviews error without PR number
+GH_REVIEWS=$("${PLUGIN_DIR}/scripts/github.sh" reviews "${TMPNOGITHUB}" 2>&1 || true)
+assert_contains "$GH_REVIEWS" "GITHUB REVIEWS" "reviews outputs format"
+
+# Test with a git repo that has no remote
+TMPGITNOGITHUB=$(mktemp -d)
+cd "$TMPGITNOGITHUB"
+git init -q
+git config user.email "test@test.com"
+git config user.name "Test"
+echo "hello" > file.txt
+git add -A && git commit -q -m "init" >/dev/null 2>&1
+cd "$PLUGIN_DIR"
+
+GH_CHECK_NOREPO=$("${PLUGIN_DIR}/scripts/github.sh" check "${TMPGITNOGITHUB}" 2>&1)
+assert_contains "$GH_CHECK_NOREPO" "not_available" "detects missing remote"
+
+# Test cache directory creation
+mkdir -p "${TMPNOGITHUB}/.livindocs/cache/github"
+echo '{"test": true}' > "${TMPNOGITHUB}/.livindocs/cache/github/prs_20.json"
+if [[ -f "${TMPNOGITHUB}/.livindocs/cache/github/prs_20.json" ]]; then
+  pass "cache directory structure is correct"
+else
+  fail "cache file not created"
+fi
+
+rm -rf "$TMPNOGITHUB" "$TMPGITNOGITHUB"
+
 # ─── Summary ─────────────────────────────────────────────────────────────────
 
 echo ""

@@ -254,10 +254,64 @@
           }
         },
         {
+          "name": "GitHub API script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/github.sh"
+          }
+        },
+        {
+          "name": "GitHub Enterprise support",
+          "status": "done",
+          "detect": {
+            "grep": "GITHUB_BASE_URL",
+            "grep_path": "scripts/github.sh"
+          }
+        },
+        {
+          "name": "GitHub graceful fallback",
+          "status": "done",
+          "detect": {
+            "grep": "FALLBACK",
+            "grep_path": "scripts/github.sh"
+          }
+        },
+        {
+          "name": "GitHub response caching",
+          "status": "done",
+          "detect": {
+            "grep": "cache_get",
+            "grep_path": "scripts/github.sh"
+          }
+        },
+        {
+          "name": "Onboarding writer agent",
+          "status": "done",
+          "detect": {
+            "file_exists": "agents/onboarding-writer.md"
+          }
+        },
+        {
+          "name": "Onboarding type in generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "onboarding-writer",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "ADR type in generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "adr-generator",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
           "name": "M4 tests",
           "status": "done",
           "detect": {
-            "grep": "git-history.sh",
+            "grep": "github.sh",
             "grep_path": "tests/run-tests.sh"
           }
         }

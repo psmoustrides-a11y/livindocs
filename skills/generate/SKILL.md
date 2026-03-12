@@ -1,9 +1,9 @@
 ---
 name: generate
-description: "Generate living documentation for a project. Analyzes the codebase, generates docs with quality verification, and embeds source references. Supports: readme (default), architecture, all."
+description: "Generate living documentation for a project. Analyzes the codebase, generates docs with quality verification, and embeds source references. Supports: readme (default), architecture, onboarding, adr, all."
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write, Glob, Grep, Agent
-argument-hint: "[readme|architecture|all]"
+argument-hint: "[readme|architecture|onboarding|adr|all]"
 ---
 
 # livindocs:generate — Documentation Generator
@@ -13,7 +13,9 @@ You are generating documentation for this project. The doc type is: **$ARGUMENTS
 Supported types:
 - `readme` — Generate README.md (default)
 - `architecture` — Generate docs/ARCHITECTURE.md with Mermaid diagrams
-- `all` — Generate both README.md and docs/ARCHITECTURE.md
+- `onboarding` — Generate docs/ONBOARDING.md for new developers
+- `adr` — Generate Architecture Decision Records in docs/decisions/
+- `all` — Generate all doc types
 
 ## Step 1: Pre-flight checks
 
@@ -116,6 +118,50 @@ Delegate to the **architecture-writer** agent. Provide it with:
 
 Wait for the architecture-writer to complete.
 
+### If type is `onboarding` or `all`:
+
+Report: `[Pass M/N: Generating ONBOARDING.md...]`
+
+Ensure docs directory exists:
+```bash
+mkdir -p docs
+```
+
+Delegate to the **onboarding-writer** agent. Provide it with:
+- The path to ProjectContext: `.livindocs/cache/context/latest.json`
+- The project config from `.livindocs.yml`
+- The quality profile
+- Task: "Generate docs/ONBOARDING.md — a practical onboarding guide for new developers joining this project"
+
+Wait for the onboarding-writer to complete.
+
+### If type is `adr` or `all`:
+
+Report: `[Pass M/N: Generating Architecture Decision Records...]`
+
+First, check if GitHub data is available:
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/github.sh check .
+```
+
+Then gather git history:
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/git-history.sh decisions . --limit 100
+```
+
+If GitHub is available, also fetch PR data:
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/github.sh prs . --limit 50
+```
+
+Delegate to the **adr-generator** agent. Provide it with:
+- The git history decisions output
+- The GitHub PR data (if available)
+- The path to ProjectContext: `.livindocs/cache/context/latest.json`
+- Task: "Generate Architecture Decision Records in docs/decisions/ from git history and PR data"
+
+Wait for the adr-generator to complete.
+
 Report: `[Pass M/N: Complete — docs written]`
 
 ## Step 7: Quality verification
@@ -131,6 +177,10 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/verify.sh README.md .
 And if architecture was generated:
 ```bash
 ${CLAUDE_PLUGIN_ROOT}/scripts/verify.sh docs/ARCHITECTURE.md .
+```
+And if onboarding was generated:
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/verify.sh docs/ONBOARDING.md .
 ```
 
 If `FAILED` count > 0 and `ACCURACY_SCORE` < 0.80, tell the relevant writer agent to fix the specific failures.

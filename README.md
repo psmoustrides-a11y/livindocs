@@ -29,6 +29,8 @@ claude install ./livindocs
 /livindocs:init              # Set up config for your project
 /livindocs:generate readme   # Generate a README
 /livindocs:generate architecture  # Generate ARCHITECTURE.md with Mermaid diagrams
+/livindocs:generate onboarding   # Generate ONBOARDING.md for new developers
+/livindocs:generate adr      # Generate Architecture Decision Records from git history
 /livindocs:generate all      # Generate all doc types
 /livindocs:check             # Check if docs are stale
 /livindocs:update            # Regenerate only stale sections
@@ -44,7 +46,7 @@ Interactive setup wizard. Detects your language, framework, and project structur
 
 ### `/livindocs:generate [type]`
 
-Generate documentation from scratch. Supported types: `readme` (default), `architecture`, `all`.
+Generate documentation from scratch. Supported types: `readme` (default), `architecture`, `onboarding`, `adr`, `all`.
 
 The generation pipeline:
 1. Scans your codebase (respecting include/exclude patterns)
@@ -121,7 +123,11 @@ livindocs is a **declarative Claude Code plugin** — no TypeScript runtime. It 
     ├── Analyzer Agent     # Reads code, maps structure, module graph, data flows
     ├── Writer Agent       # Generates README with markers and source refs
     ├── Arch-Writer Agent  # Generates ARCHITECTURE.md with Mermaid diagrams
+    ├── Onboarding Agent   # Generates ONBOARDING.md for new developers
+    ├── ADR Generator      # Generates Architecture Decision Records
     │
+    ├── git-history.sh     # Git history analysis for ADR inference
+    ├── github.sh          # GitHub API integration (PRs, issues, reviews)
     ├── verify.sh          # Programmatic claim verification
     └── detect-progress.sh # Auto-detect milestone completion
 ```
@@ -199,6 +205,7 @@ livindocs/
 │   ├── analyzer.md              # Codebase analysis agent
 │   ├── writer.md                # README generation agent
 │   ├── architecture-writer.md   # ARCHITECTURE.md + Mermaid diagrams agent
+│   ├── onboarding-writer.md     # ONBOARDING.md generation agent
 │   └── adr-generator.md         # Architecture Decision Records from git history
 ├── scripts/
 │   ├── scan.sh                  # File discovery + secret scanning
@@ -209,6 +216,7 @@ livindocs/
 │   ├── staleness.sh             # Per-section staleness detection
 │   ├── baseline.sh              # Staleness baseline snapshots
 │   ├── git-history.sh           # Git history analysis for ADR inference
+│   ├── github.sh                # GitHub API integration via gh CLI
 │   └── detect-progress.sh       # Milestone auto-detection
 ├── tests/
 │   ├── run-tests.sh             # Integration test suite
