@@ -1,14 +1,25 @@
 {
   "name": "livindocs-marketplace",
-  "displayName": "Livindocs Plugins",
-  "description": "Living documentation generator powered by Claude",
+  "owner": {
+    "name": "Peter Moustrides"
+  },
+  "metadata": {
+    "description": "Living documentation generator for Claude Code",
+    "version": "1.0.0"
+  },
   "plugins": [
     {
       "name": "livindocs",
-      "source": {
-        "source": "directory",
-        "path": "."
-      }
+      "source": ".",
+      "description": "Generates living documentation using Claude's reasoning to understand architecture, data flow, and design decisions",
+      "version": "1.0.0",
+      "author": {
+        "name": "Peter Moustrides"
+      },
+      "repository": "https://github.com/psmoustrides-a11y/livindocs",
+      "license": "MIT",
+      "keywords": ["documentation", "architecture", "living-docs", "readme", "onboarding", "adr", "api-docs"],
+      "category": "productivity"
     }
   ]
 }
