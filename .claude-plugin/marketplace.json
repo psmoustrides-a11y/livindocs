@@ -10,7 +10,10 @@
   "plugins": [
     {
       "name": "livindocs",
-      "source": ".",
+      "source": {
+        "source": "github",
+        "repo": "psmoustrides-a11y/livindocs"
+      },
       "description": "Generates living documentation using Claude's reasoning to understand architecture, data flow, and design decisions",
       "version": "1.0.0",
       "author": {
