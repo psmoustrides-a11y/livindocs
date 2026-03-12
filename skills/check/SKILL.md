@@ -79,6 +79,34 @@ Tell the user: "No baseline found. Run `/livindocs:generate` to create a baselin
 ### If `STATUS: compared`:
 Display the full list of changed, missing, and new files.
 
+## Step 5: Coverage report (optional)
+
+If the user passed `--coverage` (check $ARGUMENTS), also run the coverage reporter:
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/coverage.sh .
+```
+
+Display the coverage summary after the staleness report.
+
+## CI mode
+
+If the environment variable `CI=true` is set or the user passed `--ci`:
+
+Output a structured, machine-parseable summary instead of the human-friendly table:
+```
+LIVINDOCS_STATUS=current|stale|possibly-stale
+LIVINDOCS_STALE_COUNT=N
+LIVINDOCS_TOTAL_SECTIONS=N
+LIVINDOCS_BASELINE=present|missing
+```
+
+Exit codes for CI:
+- `0` — docs are current
+- `1` — docs are stale (when `LIVINDOCS_FAIL_ON=stale`)
+- `1` — docs are possibly-stale or worse (when `LIVINDOCS_FAIL_ON=possibly-stale`)
+
+The `LIVINDOCS_FAIL_ON` environment variable controls the threshold (default: `stale`).
+
 ## Rules
 
 - This is a read-only command — never modify any files.

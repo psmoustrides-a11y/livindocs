@@ -1,0 +1,76 @@
+# livindocs GitLab CI template
+# Add this to your .gitlab-ci.yml to check documentation freshness on merge requests.
+#
+# Usage:
+#   include:
+#     - remote: 'https://raw.githubusercontent.com/livindocs/livindocs/main/ci/gitlab-ci.yml'
+#
+# Or copy the relevant job(s) into your .gitlab-ci.yml directly.
+
+# ─── Check: Fail MR if docs are stale ─────────────────────────────────────────
+docs-check:
+  stage: validate
+  image: ubuntu:latest
+  variables:
+    LIVINDOCS_FAIL_ON: "stale"  # stale | possibly-stale | never
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git bc
+  script:
+    - |
+      if [ ! -f .livindocs.yml ]; then
+        echo "livindocs config not found. Run /livindocs:init first."
+        exit 1
+      fi
+
+      # Clone livindocs scripts (or use local copy)
+      PLUGIN_DIR="${LIVINDOCS_PLUGIN_DIR:-.livindocs/plugin}"
+      if [ ! -d "$PLUGIN_DIR/scripts" ]; then
+        echo "livindocs plugin not found at $PLUGIN_DIR"
+        echo "Set LIVINDOCS_PLUGIN_DIR or install the plugin"
+        exit 1
+      fi
+
+      STALENESS=$(bash "$PLUGIN_DIR/scripts/staleness.sh" .)
+      echo "$STALENESS"
+
+      OVERALL=$(echo "$STALENESS" | grep '^OVERALL:' | awk '{print $2}')
+      STALE_COUNT=$(echo "$STALENESS" | grep '^STALE:' | awk '{print $2}')
+
+      case "$LIVINDOCS_FAIL_ON" in
+        stale)
+          if [ "$OVERALL" = "stale" ] || [ "$OVERALL" = "very-stale" ]; then
+            echo "ERROR: Documentation is stale ($STALE_COUNT sections). Run /livindocs:update."
+            exit 1
+          fi
+          ;;
+        possibly-stale)
+          if [ "$OVERALL" != "current" ]; then
+            echo "WARNING: Documentation may be stale. Run /livindocs:check --verbose."
+            exit 1
+          fi
+          ;;
+        never)
+          echo "Documentation status: $OVERALL (not failing)"
+          ;;
+      esac
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# ─── Coverage: Report documentation coverage ──────────────────────────────────
+docs-coverage:
+  stage: validate
+  image: ubuntu:latest
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git bc
+  script:
+    - |
+      PLUGIN_DIR="${LIVINDOCS_PLUGIN_DIR:-.livindocs/plugin}"
+      if [ ! -d "$PLUGIN_DIR/scripts" ]; then
+        echo "livindocs plugin not found"
+        exit 1
+      fi
+
+      bash "$PLUGIN_DIR/scripts/coverage.sh" .
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  allow_failure: true

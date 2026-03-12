@@ -1,0 +1,144 @@
+name: 'livindocs'
+description: 'Check documentation freshness and auto-update stale docs'
+branding:
+  icon: 'book-open'
+  color: 'blue'
+
+inputs:
+  command:
+    description: 'Command to run: check, update, coverage'
+    required: true
+    default: 'check'
+  config:
+    description: 'Path to .livindocs.yml config file'
+    required: false
+    default: '.livindocs.yml'
+  fail-on:
+    description: 'Fail the action if docs are: stale, possibly-stale, or never (default: stale)'
+    required: false
+    default: 'stale'
+  quality-profile:
+    description: 'Quality profile: minimal, standard, thorough'
+    required: false
+    default: 'standard'
+  working-directory:
+    description: 'Working directory for the project'
+    required: false
+    default: '.'
+  auto-commit:
+    description: 'Auto-commit updated docs (only with command: update)'
+    required: false
+    default: 'false'
+  commit-message:
+    description: 'Commit message for auto-committed docs'
+    required: false
+    default: 'docs: update generated documentation [livindocs]'
+
+outputs:
+  status:
+    description: 'Overall documentation status: current, stale, possibly-stale'
+  stale-count:
+    description: 'Number of stale documentation sections'
+  coverage:
+    description: 'Documentation coverage percentage'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check livindocs config
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        if [[ ! -f "${{ inputs.config }}" ]]; then
+          echo "::error::livindocs config not found at ${{ inputs.config }}. Run /livindocs:init first."
+          exit 1
+        fi
+
+    - name: Run livindocs check
+      if: inputs.command == 'check'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        PLUGIN_DIR="${{ github.action_path }}/.."
+
+        # Run staleness detection
+        STALENESS=$(bash "$PLUGIN_DIR/scripts/staleness.sh" .)
+        echo "$STALENESS"
+
+        # Parse results
+        OVERALL=$(echo "$STALENESS" | grep '^OVERALL:' | awk '{print $2}')
+        STALE_COUNT=$(echo "$STALENESS" | grep '^STALE:' | awk '{print $2}')
+        STALE_COUNT=${STALE_COUNT:-0}
+
+        echo "status=$OVERALL" >> $GITHUB_OUTPUT
+        echo "stale-count=$STALE_COUNT" >> $GITHUB_OUTPUT
+
+        # Determine exit code based on fail-on setting
+        FAIL_ON="${{ inputs.fail-on }}"
+        case "$FAIL_ON" in
+          stale)
+            if [[ "$OVERALL" == "stale" || "$OVERALL" == "very-stale" ]]; then
+              echo "::error::Documentation is stale ($STALE_COUNT sections need updating). Run /livindocs:update."
+              exit 1
+            fi
+            ;;
+          possibly-stale)
+            if [[ "$OVERALL" != "current" ]]; then
+              echo "::warning::Documentation may be stale. Run /livindocs:check --verbose for details."
+              exit 1
+            fi
+            ;;
+          never)
+            echo "Documentation status: $OVERALL (fail-on=never, not failing)"
+            ;;
+        esac
+
+    - name: Run livindocs coverage
+      if: inputs.command == 'coverage'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        PLUGIN_DIR="${{ github.action_path }}/.."
+        COVERAGE=$(bash "$PLUGIN_DIR/scripts/coverage.sh" .)
+        echo "$COVERAGE"
+
+        ENTITY_COV=$(echo "$COVERAGE" | grep 'ENTITY_COVERAGE:' | awk '{print $2}')
+        echo "coverage=$ENTITY_COV" >> $GITHUB_OUTPUT
+
+    - name: Run livindocs update
+      if: inputs.command == 'update'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        PLUGIN_DIR="${{ github.action_path }}/.."
+
+        # Check staleness first
+        STALENESS=$(bash "$PLUGIN_DIR/scripts/staleness.sh" .)
+        OVERALL=$(echo "$STALENESS" | grep '^OVERALL:' | awk '{print $2}')
+
+        if [[ "$OVERALL" == "current" ]]; then
+          echo "Documentation is up to date. Nothing to update."
+          echo "status=current" >> $GITHUB_OUTPUT
+          echo "stale-count=0" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+
+        echo "::notice::Documentation is $OVERALL. Update requires Claude Code CLI."
+        echo "::notice::Run '/livindocs:update' locally or set up Claude Code in CI."
+        echo "status=$OVERALL" >> $GITHUB_OUTPUT
+
+    - name: Auto-commit changes
+      if: inputs.command == 'update' && inputs.auto-commit == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        if git diff --quiet; then
+          echo "No changes to commit."
+          exit 0
+        fi
+
+        git config --local user.email "livindocs[bot]@users.noreply.github.com"
+        git config --local user.name "livindocs[bot]"
+        git add -A docs/ README.md ARCHITECTURE.md
+        git commit -m "${{ inputs.commit-message }}"
+        git push

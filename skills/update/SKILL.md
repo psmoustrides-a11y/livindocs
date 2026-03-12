@@ -10,7 +10,7 @@ argument-hint: "[--dry-run]"
 
 You are updating only the stale sections of the project's documentation, preserving all content outside livindocs markers.
 
-Arguments: **$ARGUMENTS** (supports `--dry-run`)
+Arguments: **$ARGUMENTS** (supports `--dry-run`, `--commit`)
 
 ## Step 1: Pre-flight
 
@@ -136,9 +136,24 @@ New baseline saved at TIMESTAMP.
 To check freshness later: /livindocs:check
 ```
 
+## Auto-commit mode
+
+If `$ARGUMENTS` contains `--commit`:
+
+After the update completes and verification passes, automatically commit the changes:
+```bash
+git add README.md docs/
+git commit -m "docs: update generated documentation [livindocs]"
+```
+
+This mode is designed for CI/CD pipelines where docs should be auto-maintained. The commit message includes `[livindocs]` so it can be filtered in git log.
+
+If both `--dry-run` and `--commit` are specified, `--dry-run` takes precedence (show diff, don't commit).
+
 ## Important rules
 
 - NEVER modify content outside of `<!-- livindocs:start:SECTION -->` ... `<!-- livindocs:end:SECTION -->` markers.
 - Only regenerate sections that are marked as STALE. Leave CURRENT and POSSIBLY_STALE sections alone.
 - Always update `<!-- livindocs:refs: -->` anchors in regenerated sections to reflect current source file references.
 - In dry-run mode, NEVER write files until the user confirms.
+- In commit mode, only commit if verification passes.
