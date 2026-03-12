@@ -316,6 +316,404 @@
           }
         }
       ]
+    },
+    {
+      "name": "M5: Monorepo + Custom Analyzers",
+      "items": [
+        {
+          "name": "Monorepo detection script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/detect-monorepo.sh"
+          }
+        },
+        {
+          "name": "npm/yarn workspace detection",
+          "status": "done",
+          "detect": {
+            "grep": "detect_npm_yarn_workspaces",
+            "grep_path": "scripts/detect-monorepo.sh"
+          }
+        },
+        {
+          "name": "pnpm workspace detection",
+          "status": "done",
+          "detect": {
+            "grep": "detect_pnpm_workspaces",
+            "grep_path": "scripts/detect-monorepo.sh"
+          }
+        },
+        {
+          "name": "lerna detection",
+          "status": "done",
+          "detect": {
+            "grep": "detect_lerna",
+            "grep_path": "scripts/detect-monorepo.sh"
+          }
+        },
+        {
+          "name": "Cargo workspace detection",
+          "status": "done",
+          "detect": {
+            "grep": "detect_cargo_workspaces",
+            "grep_path": "scripts/detect-monorepo.sh"
+          }
+        },
+        {
+          "name": "Go workspace detection",
+          "status": "done",
+          "detect": {
+            "grep": "detect_go_workspaces",
+            "grep_path": "scripts/detect-monorepo.sh"
+          }
+        },
+        {
+          "name": "Inter-package dependency detection",
+          "status": "done",
+          "detect": {
+            "grep": "DEP_EDGES",
+            "grep_path": "scripts/detect-monorepo.sh"
+          }
+        },
+        {
+          "name": "Shared dependency detection",
+          "status": "done",
+          "detect": {
+            "grep": "SHARED_DEPS",
+            "grep_path": "scripts/detect-monorepo.sh"
+          }
+        },
+        {
+          "name": "Monorepo flag in scan output",
+          "status": "done",
+          "detect": {
+            "grep": "MONOREPO:",
+            "grep_path": "scripts/scan.sh"
+          }
+        },
+        {
+          "name": "Monorepo in analyzer agent",
+          "status": "done",
+          "detect": {
+            "grep": "packageGraph",
+            "grep_path": "agents/analyzer.md"
+          }
+        },
+        {
+          "name": "Package relationship diagrams",
+          "status": "done",
+          "detect": {
+            "grep": "arch-package-relationships",
+            "grep_path": "agents/architecture-writer.md"
+          }
+        },
+        {
+          "name": "Monorepo-aware generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "detect-monorepo",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Per-package doc generation",
+          "status": "done",
+          "detect": {
+            "grep": "per-package",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Monorepo test fixture",
+          "status": "done",
+          "detect": {
+            "file_exists": "tests/fixtures/monorepo/package.json"
+          }
+        },
+        {
+          "name": "M5 monorepo tests",
+          "status": "done",
+          "detect": {
+            "grep": "detect-monorepo.sh",
+            "grep_path": "tests/run-tests.sh"
+          }
+        },
+        {
+          "name": "Custom analyzer plugin system",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/run-custom-analyzers.sh"
+          }
+        },
+        {
+          "name": "Script analyzer discovery",
+          "status": "done",
+          "detect": {
+            "grep": "discover_analyzers",
+            "grep_path": "scripts/run-custom-analyzers.sh"
+          }
+        },
+        {
+          "name": "Agent analyzer discovery",
+          "status": "done",
+          "detect": {
+            "grep": "TYPE: agent",
+            "grep_path": "scripts/run-custom-analyzers.sh"
+          }
+        },
+        {
+          "name": "Custom generator discovery",
+          "status": "done",
+          "detect": {
+            "grep": "discover_generators",
+            "grep_path": "scripts/run-custom-analyzers.sh"
+          }
+        },
+        {
+          "name": "Custom analyzer in generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "run-custom-analyzers",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Custom generator in generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "Custom generators",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Custom analyzer integration in analyzer agent",
+          "status": "done",
+          "detect": {
+            "grep": "customAnalysis",
+            "grep_path": "agents/analyzer.md"
+          }
+        },
+        {
+          "name": "Custom analyzers interface spec",
+          "status": "done",
+          "detect": {
+            "file_exists": "docs/CUSTOM_ANALYZERS.md"
+          }
+        },
+        {
+          "name": "Sample custom analyzer fixture",
+          "status": "done",
+          "detect": {
+            "file_exists": "tests/fixtures/express-api/.livindocs/analyzers/route-counter.sh"
+          }
+        },
+        {
+          "name": "M5 custom plugin tests",
+          "status": "done",
+          "detect": {
+            "grep": "run-custom-analyzers.sh",
+            "grep_path": "tests/run-tests.sh"
+          }
+        }
+      ]
+    },
+    {
+      "name": "M6: API Docs + CI",
+      "items": [
+        {
+          "name": "API surface analyzer agent",
+          "status": "done",
+          "detect": {
+            "file_exists": "agents/api-analyzer.md"
+          }
+        },
+        {
+          "name": "API reference writer agent",
+          "status": "done",
+          "detect": {
+            "file_exists": "agents/api-reference-writer.md"
+          }
+        },
+        {
+          "name": "API type in generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "api-analyzer",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Coverage reporter script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/coverage.sh"
+          }
+        },
+        {
+          "name": "Coverage in generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "coverage.sh",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Coverage flag in check skill",
+          "status": "done",
+          "detect": {
+            "grep": "coverage",
+            "grep_path": "skills/check/SKILL.md"
+          }
+        },
+        {
+          "name": "GitHub Actions action",
+          "status": "done",
+          "detect": {
+            "file_exists": "ci/action.yml"
+          }
+        },
+        {
+          "name": "GitLab CI template",
+          "status": "done",
+          "detect": {
+            "file_exists": "ci/gitlab-ci.yml"
+          }
+        },
+        {
+          "name": "CI mode in check skill",
+          "status": "done",
+          "detect": {
+            "grep": "LIVINDOCS_STATUS",
+            "grep_path": "skills/check/SKILL.md"
+          }
+        },
+        {
+          "name": "Auto-commit in update skill",
+          "status": "done",
+          "detect": {
+            "grep": "commit",
+            "grep_path": "skills/update/SKILL.md"
+          }
+        },
+        {
+          "name": "M6 coverage tests",
+          "status": "done",
+          "detect": {
+            "grep": "coverage.sh",
+            "grep_path": "tests/run-tests.sh"
+          }
+        },
+        {
+          "name": "M6 CI template tests",
+          "status": "done",
+          "detect": {
+            "grep": "CI templates",
+            "grep_path": "tests/run-tests.sh"
+          }
+        },
+        {
+          "name": "M6 API agent tests",
+          "status": "done",
+          "detect": {
+            "grep": "api-analyzer",
+            "grep_path": "tests/run-tests.sh"
+          }
+        }
+      ]
+    },
+    {
+      "name": "M7: Community Release (v1.0)",
+      "items": [
+        {
+          "name": "Contributor guide",
+          "status": "done",
+          "detect": {
+            "file_exists": "CONTRIBUTING.md"
+          }
+        },
+        {
+          "name": "Template system",
+          "status": "done",
+          "detect": {
+            "file_exists": "templates/readme.md.hbs"
+          }
+        },
+        {
+          "name": "Template customization docs",
+          "status": "done",
+          "detect": {
+            "file_exists": "docs/TEMPLATES.md"
+          }
+        },
+        {
+          "name": "Performance benchmark script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/benchmark.sh"
+          }
+        },
+        {
+          "name": "Versioned documentation script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/version-docs.sh"
+          }
+        },
+        {
+          "name": "Opt-in telemetry script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/telemetry.sh"
+          }
+        },
+        {
+          "name": "Telemetry record command",
+          "status": "done",
+          "detect": {
+            "grep": "record",
+            "grep_path": "scripts/telemetry.sh"
+          }
+        },
+        {
+          "name": "Model selection config",
+          "status": "done",
+          "detect": {
+            "grep": "model",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Budget flag in generate",
+          "status": "done",
+          "detect": {
+            "grep": "budget",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Plugin v1.0.0 manifest",
+          "status": "done",
+          "detect": {
+            "grep": "1.0.0",
+            "grep_path": ".claude-plugin/plugin.json"
+          }
+        },
+        {
+          "name": "Self-documentation config",
+          "status": "done",
+          "detect": {
+            "file_exists": ".livindocs.yml"
+          }
+        },
+        {
+          "name": "M7 tests",
+          "status": "done",
+          "detect": {
+            "grep": "benchmark.sh",
+            "grep_path": "tests/run-tests.sh"
+          }
+        }
+      ]
     }
   ]
 }

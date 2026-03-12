@@ -1,0 +1,62 @@
+# Architecture: {{project.name}}
+
+{{project.description}}
+
+<!-- livindocs:start:arch-overview -->
+## Overview
+
+{{! Generated high-level architecture overview }}
+
+<!-- livindocs:end:arch-overview -->
+
+<!-- livindocs:start:arch-modules -->
+## Module Structure
+
+{{! Generated module dependency graph (Mermaid) }}
+
+```mermaid
+graph TD
+{{#each modules}}
+    {{this.id}}[{{this.name}}]
+{{/each}}
+```
+
+<!-- livindocs:end:arch-modules -->
+
+<!-- livindocs:start:arch-data-flow -->
+## Data Flow
+
+{{! Generated data flow diagram (Mermaid) }}
+
+<!-- livindocs:end:arch-data-flow -->
+
+<!-- livindocs:start:arch-entry-points -->
+## Entry Points
+
+{{#each entryPoints}}
+- `{{this.path}}` — {{this.description}}
+{{/each}}
+
+<!-- livindocs:end:arch-entry-points -->
+
+<!-- livindocs:start:arch-dependencies -->
+## Dependencies
+
+### Runtime
+{{#each runtimeDeps}}
+- **{{this.name}}** ({{this.version}}) — {{this.purpose}}
+{{/each}}
+
+### Development
+{{#each devDeps}}
+- **{{this.name}}** ({{this.version}}) — {{this.purpose}}
+{{/each}}
+
+<!-- livindocs:end:arch-dependencies -->
+
+<!-- livindocs:start:arch-patterns -->
+## Design Patterns & Conventions
+
+{{! Generated patterns section }}
+
+<!-- livindocs:end:arch-patterns -->

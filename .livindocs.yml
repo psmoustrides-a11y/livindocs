@@ -1,0 +1,39 @@
+version: 1
+
+outputs:
+  - readme
+  - architecture
+  - onboarding
+
+docs_dir: docs/
+
+include:
+  - scripts/**
+  - skills/**
+  - agents/**
+  - ci/**
+  - templates/**
+
+exclude:
+  - "**/*.test.*"
+  - tests/fixtures/**
+  - node_modules/
+  - .livindocs/cache/
+
+project:
+  name: "livindocs"
+  description: "Claude Code plugin that generates living documentation from codebases"
+  audience: "Developers building or contributing to the livindocs plugin"
+
+budget:
+  preset: balanced
+
+quality:
+  profile: standard
+
+telemetry:
+  enabled: false
+
+tracking:
+  enabled: true
+  auto_detect: true

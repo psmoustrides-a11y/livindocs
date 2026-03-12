@@ -1,0 +1,33 @@
+# ADR-{{number}}: {{title}}
+
+**Date:** {{date}}
+**Status:** {{status}}
+**Decision makers:** {{#each authors}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+
+## Context
+
+{{! Generated context from git history and PR data }}
+
+<!-- livindocs:start:adr-{{id}}-context -->
+<!-- livindocs:end:adr-{{id}}-context -->
+
+## Decision
+
+<!-- livindocs:start:adr-{{id}}-decision -->
+{{! Generated decision summary }}
+<!-- livindocs:end:adr-{{id}}-decision -->
+
+## Consequences
+
+<!-- livindocs:start:adr-{{id}}-consequences -->
+{{! Generated consequences analysis }}
+<!-- livindocs:end:adr-{{id}}-consequences -->
+
+## Related
+
+{{#each relatedCommits}}
+- {{this.hash}} — {{this.subject}}
+{{/each}}
+{{#each relatedPRs}}
+- PR #{{this.number}} — {{this.title}}
+{{/each}}

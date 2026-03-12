@@ -1,10 +1,25 @@
 {
   "name": "livindocs",
-  "version": "0.1.0",
-  "description": "Living documentation that stays current as your code evolves. Generates READMEs, architecture docs, and more using Claude's reasoning.",
+  "version": "1.0.0",
+  "description": "Living documentation that stays current as your code evolves. Generates READMEs, architecture docs, onboarding guides, API references, and ADRs using Claude's reasoning.",
   "author": {
     "name": "livindocs contributors"
   },
   "license": "MIT",
-  "keywords": ["documentation", "readme", "architecture", "living-docs"]
+  "repository": "https://github.com/livindocs/livindocs",
+  "keywords": [
+    "documentation",
+    "readme",
+    "architecture",
+    "living-docs",
+    "onboarding",
+    "adr",
+    "api-docs",
+    "mermaid",
+    "monorepo",
+    "ci-cd"
+  ],
+  "engines": {
+    "claude-code": ">=1.0.0"
+  }
 }

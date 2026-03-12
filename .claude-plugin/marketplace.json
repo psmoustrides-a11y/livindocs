@@ -1,0 +1,14 @@
+{
+  "name": "livindocs-marketplace",
+  "displayName": "Livindocs Plugins",
+  "description": "Living documentation generator powered by Claude",
+  "plugins": [
+    {
+      "name": "livindocs",
+      "source": {
+        "source": "directory",
+        "path": "."
+      }
+    }
+  ]
+}
