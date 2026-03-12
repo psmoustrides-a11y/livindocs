@@ -1,0 +1,10 @@
+{
+  "name": "livindocs",
+  "version": "0.1.0",
+  "description": "Living documentation that stays current as your code evolves. Generates READMEs, architecture docs, and more using Claude's reasoning.",
+  "author": {
+    "name": "livindocs contributors"
+  },
+  "license": "MIT",
+  "keywords": ["documentation", "readme", "architecture", "living-docs"]
+}

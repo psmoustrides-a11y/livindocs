@@ -1,0 +1,8 @@
+# livindocs cache (regenerated on each run)
+.livindocs/cache/
+
+# OS files
+.DS_Store
+
+# Node
+node_modules/

@@ -1,0 +1,267 @@
+{
+  "version": 1,
+  "updated_at": "2026-03-12T00:00:00.000Z",
+  "milestones": [
+    {
+      "name": "M1: Foundation",
+      "items": [
+        {
+          "name": "Plugin manifest",
+          "status": "done",
+          "detect": {
+            "file_exists": ".claude-plugin/plugin.json"
+          }
+        },
+        {
+          "name": "Init skill",
+          "status": "done",
+          "detect": {
+            "file_exists": "skills/init/SKILL.md"
+          }
+        },
+        {
+          "name": "Generate skill",
+          "status": "done",
+          "detect": {
+            "file_exists": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Status skill",
+          "status": "done",
+          "detect": {
+            "file_exists": "skills/status/SKILL.md"
+          }
+        },
+        {
+          "name": "Analyzer agent",
+          "status": "done",
+          "detect": {
+            "file_exists": "agents/analyzer.md"
+          }
+        },
+        {
+          "name": "Writer agent",
+          "status": "done",
+          "detect": {
+            "file_exists": "agents/writer.md"
+          }
+        },
+        {
+          "name": "File scanner script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/scan.sh"
+          }
+        },
+        {
+          "name": "Budget estimation script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/budget.sh"
+          }
+        },
+        {
+          "name": "Verification script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/verify.sh"
+          }
+        },
+        {
+          "name": "Progress detection script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/detect-progress.sh"
+          }
+        },
+        {
+          "name": "Express API test fixture",
+          "status": "done",
+          "detect": {
+            "file_exists": "tests/fixtures/express-api/package.json"
+          }
+        },
+        {
+          "name": "React app test fixture",
+          "status": "done",
+          "detect": {
+            "file_exists": "tests/fixtures/react-app/package.json"
+          }
+        },
+        {
+          "name": "Integration test suite",
+          "status": "done",
+          "detect": {
+            "file_exists": "tests/run-tests.sh"
+          }
+        },
+        {
+          "name": "README",
+          "status": "done",
+          "detect": {
+            "file_exists": "README.md"
+          }
+        }
+      ]
+    },
+    {
+      "name": "M2: Architecture Docs + Caching + Quality",
+      "items": [
+        {
+          "name": "Architecture writer agent",
+          "status": "done",
+          "detect": {
+            "file_exists": "agents/architecture-writer.md"
+          }
+        },
+        {
+          "name": "Architecture analysis in analyzer",
+          "status": "done",
+          "detect": {
+            "grep": "moduleGraph",
+            "grep_path": "agents/analyzer.md"
+          }
+        },
+        {
+          "name": "Mermaid diagram generation",
+          "status": "done",
+          "detect": {
+            "grep": "mermaid",
+            "grep_path": "agents/architecture-writer.md"
+          }
+        },
+        {
+          "name": "Cache script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/cache.sh"
+          }
+        },
+        {
+          "name": "Chunk script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/chunk.sh"
+          }
+        },
+        {
+          "name": "Quality profiles in generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "quality profile",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "Architecture type in generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "architecture-writer",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "M2 tests",
+          "status": "done",
+          "detect": {
+            "grep": "cache.sh",
+            "grep_path": "tests/run-tests.sh"
+          }
+        }
+      ]
+    },
+    {
+      "name": "M3: Staleness Detection",
+      "items": [
+        {
+          "name": "Staleness detection script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/staleness.sh"
+          }
+        },
+        {
+          "name": "Baseline snapshot script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/baseline.sh"
+          }
+        },
+        {
+          "name": "Check skill",
+          "status": "done",
+          "detect": {
+            "file_exists": "skills/check/SKILL.md"
+          }
+        },
+        {
+          "name": "Update skill",
+          "status": "done",
+          "detect": {
+            "file_exists": "skills/update/SKILL.md"
+          }
+        },
+        {
+          "name": "Baseline save in generate skill",
+          "status": "done",
+          "detect": {
+            "grep": "baseline.sh",
+            "grep_path": "skills/generate/SKILL.md"
+          }
+        },
+        {
+          "name": "M3 tests",
+          "status": "done",
+          "detect": {
+            "grep": "staleness.sh",
+            "grep_path": "tests/run-tests.sh"
+          }
+        }
+      ]
+    },
+    {
+      "name": "M4: GitHub Integration + ADRs",
+      "items": [
+        {
+          "name": "Explain skill",
+          "status": "done",
+          "detect": {
+            "file_exists": "skills/explain/SKILL.md"
+          }
+        },
+        {
+          "name": "ADR generator agent",
+          "status": "done",
+          "detect": {
+            "grep": "adr",
+            "grep_path": "agents/"
+          }
+        },
+        {
+          "name": "Git history analysis script",
+          "status": "done",
+          "detect": {
+            "file_exists": "scripts/git-history.sh"
+          }
+        },
+        {
+          "name": "Decision detection in git-history",
+          "status": "done",
+          "detect": {
+            "grep": "is_decision_commit",
+            "grep_path": "scripts/git-history.sh"
+          }
+        },
+        {
+          "name": "M4 tests",
+          "status": "done",
+          "detect": {
+            "grep": "git-history.sh",
+            "grep_path": "tests/run-tests.sh"
+          }
+        }
+      ]
+    }
+  ]
+}

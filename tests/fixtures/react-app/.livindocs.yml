@@ -1,0 +1,22 @@
+version: 1
+outputs:
+  - readme
+
+docs_dir: docs/
+
+include:
+  - src/**
+
+exclude:
+  - "**/*.test.*"
+
+project:
+  name: "React User Dashboard"
+  description: "User management dashboard built with React and Vite"
+  audience: "Frontend engineers"
+
+budget:
+  preset: frugal
+
+quality:
+  profile: standard

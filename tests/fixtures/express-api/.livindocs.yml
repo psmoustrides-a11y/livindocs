@@ -1,0 +1,22 @@
+version: 1
+outputs:
+  - readme
+
+docs_dir: docs/
+
+include:
+  - src/**
+
+exclude:
+  - "**/*.test.js"
+
+project:
+  name: "Express User API"
+  description: "REST API for user management with JWT authentication"
+  audience: "Backend engineers"
+
+budget:
+  preset: frugal
+
+quality:
+  profile: standard
