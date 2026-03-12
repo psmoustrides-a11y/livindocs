@@ -1,0 +1,10 @@
+{
+  "name": "@monorepo/shared",
+  "version": "1.0.0",
+  "description": "Shared utilities and types",
+  "main": "src/index.ts",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}

@@ -119,6 +119,33 @@ For each important module/layer, explain:
 <!-- livindocs:refs:src/ -->
 <!-- livindocs:end:arch-key-components -->
 
+<!-- livindocs:start:arch-package-relationships -->
+## Package Relationships
+
+(Only for monorepo projects — include if ProjectContext has a `monorepo` field)
+
+Brief overview of the monorepo structure and workspace tool.
+
+```mermaid
+graph TD
+    subgraph packages
+        API[@org/api]
+        UI[@org/ui]
+        Shared[@org/shared]
+    end
+    API --> Shared
+    UI --> Shared
+```
+
+For each package, briefly describe:
+- **Purpose** — what the package does
+- **Key dependencies** — other packages it depends on
+- **Public API** — what it exports for other packages
+
+List shared dependencies used across multiple packages.
+<!-- livindocs:refs:package.json,packages/ -->
+<!-- livindocs:end:arch-package-relationships -->
+
 <!-- livindocs:start:arch-design-patterns -->
 ## Design Patterns
 

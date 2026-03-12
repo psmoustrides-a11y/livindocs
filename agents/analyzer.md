@@ -96,6 +96,19 @@ Note any recurring patterns:
 
 Classify as one of: `web-api`, `frontend`, `cli`, `library`, `fullstack`, `monorepo`
 
+### 10. Monorepo analysis (if applicable)
+
+If the project type is `monorepo` or if monorepo detection data is provided:
+
+1. Read the monorepo detection output (provided in your prompt) to understand workspace type and packages
+2. For each package, perform a focused analysis:
+   - Read the package's entry point and key source files
+   - Identify the package's purpose and public API
+   - Map its dependencies on other packages in the monorepo
+3. Build a `packageGraph` showing inter-package dependencies
+4. Identify shared dependencies used across multiple packages
+5. Note the workspace tool (npm/yarn/pnpm workspaces, lerna, cargo, go)
+
 ## Output JSON schema
 
 ```json
@@ -169,11 +182,59 @@ Classify as one of: `web-api`, `frontend`, `cli`, `library`, `fullstack`, `monor
   "buildCommand": null,
   "testCommand": "npm test",
   "license": "MIT",
+  "monorepo": null,
   "analyzedAt": "2024-01-01T00:00:00.000Z",
   "filesAnalyzed": 12,
   "linesAnalyzed": 847
 }
 ```
+
+For monorepo projects, the `monorepo` field should contain:
+
+```json
+{
+  "monorepo": {
+    "workspaceType": "npm-workspaces",
+    "workspaceConfig": "package.json",
+    "packages": [
+      {
+        "name": "@org/api",
+        "path": "packages/api",
+        "description": "REST API server",
+        "language": "typescript",
+        "frameworks": ["express"],
+        "entryPoints": ["packages/api/src/index.ts"],
+        "dependencies": ["@org/shared"]
+      }
+    ],
+    "packageGraph": [
+      { "from": "@org/api", "to": "@org/shared" },
+      { "from": "@org/ui", "to": "@org/shared" }
+    ],
+    "sharedDependencies": ["typescript", "eslint"]
+  }
+}
+```
+
+### 11. Integrate custom analyzer findings (if applicable)
+
+If custom analyzer output is provided in your prompt:
+
+1. **Script analyzer output**: Parse the structured findings and incorporate them into the ProjectContext. Add them under a `customAnalysis` key:
+   ```json
+   {
+     "customAnalysis": {
+       "route-counter": {
+         "confidence": 0.95,
+         "findings": { "GET": 2, "POST": 3, "TOTAL": 7 }
+       }
+     }
+   }
+   ```
+
+2. **Agent analyzer definitions**: If agent-based analyzer `.md` files are listed, read each one to understand what `output-key` it uses. After writing the initial ProjectContext, read the relevant files specified by each agent analyzer's `file-filter` and add findings under that analyzer's `output-key`.
+
+Custom analysis data is available to all downstream generators through the ProjectContext.
 
 ## Rules
 

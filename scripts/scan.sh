@@ -6,6 +6,7 @@
 
 set -euo pipefail
 
+SCAN_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DETECT_ONLY=false
 PROJECT_DIR="."
 
@@ -418,6 +419,15 @@ fi
 scan_files
 scan_secrets
 
+# ─── Monorepo detection ──────────────────────────────────────────────────────
+
+MONOREPO_INFO=""
+if [[ -f "$SCAN_SCRIPT_DIR/detect-monorepo.sh" ]]; then
+  MONOREPO_INFO=$(bash "$SCAN_SCRIPT_DIR/detect-monorepo.sh" --check . 2>/dev/null || true)
+fi
+IS_MONOREPO=$(echo "$MONOREPO_INFO" | { grep "^MONOREPO:" || true; } | awk '{print $2}')
+MONOREPO_TYPE=$(echo "$MONOREPO_INFO" | { grep "^TYPE:" || true; } | awk '{print $2}')
+
 # ─── Output ──────────────────────────────────────────────────────────────────
 
 echo "=== SCAN RESULTS ==="
@@ -426,6 +436,10 @@ echo "LINES: $TOTAL_LINES"
 echo "LANGUAGES: ${LANGUAGES[*]:+${LANGUAGES[*]}}${LANGUAGES[*]:-none}"
 echo "FRAMEWORKS: ${FRAMEWORKS[*]:+${FRAMEWORKS[*]}}${FRAMEWORKS[*]:-none}"
 echo "ENTRY_POINTS: ${ENTRY_POINTS[*]:+${ENTRY_POINTS[*]}}${ENTRY_POINTS[*]:-none}"
+echo "MONOREPO: ${IS_MONOREPO:-false}"
+if [[ "${IS_MONOREPO}" == "true" ]]; then
+  echo "MONOREPO_TYPE: ${MONOREPO_TYPE:-unknown}"
+fi
 echo "SECRETS: ${SECRETS_FOUND} found, ${SECRETS_REDACTED} redacted"
 
 if [[ ${#WARNINGS[@]} -gt 0 ]]; then
